@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace属性：名称空间（命名空间），对应mapper接口的全类名 -->
+<mapper namespace="ssm.mapper.EmpMapper">
+    <!-- 对应接口中的方法 -->
+    <!--
+        查询功能的标签必须设置resultType或resultMap，且两个属性不能同时存在
+        resultType：设置默认的映射关系，设置结果类型，即查询的数据要装换为的java类型
+        resultMap：设置自定义的映射关系，处理多对一或一对多的映射关系
+    -->
+    <select id="getAll" resultType="Emp">
+      select * from t_emp
+    </select>
+</mapper>

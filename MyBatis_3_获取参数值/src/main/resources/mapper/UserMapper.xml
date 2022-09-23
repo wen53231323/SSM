@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  namespace名称空间，对应mapper接口的全类名 -->
+<mapper namespace="mapper.UserMapper">
+    <!-- 对应接口中的方法 User getUserByUsername_1(String username);根据用户名查询用户信息-->
+    <select id="getUserByUsername_1" resultType="User">
+        select * from t_user where username = #{username}
+    </select>
+    <!-- 对应接口中的方法 User getUserByUsername_2(String username);根据用户名查询用户信息-->
+    <select id="getUserByUsername_2" resultType="User">
+        select * from t_user where username = '${username}'
+    </select>
+
+    <!-- 对应接口中的方法 User checklogin_1(String username,String password); 用户验证登录-->
+    <select id="checklogin_1" resultType="User">
+        select * from t_user where username = #{arg0} and password = #{arg1}
+    </select>
+    <!-- 对应接口中的方法 User checklogin_2(String username,String password); 用户验证登录-->
+    <select id="checklogin_2" resultType="User">
+        select * from t_user where username = '${param1}' and password = '${param2}'
+    </select>
+
+    <!-- 对应接口中的方法 User checkloginByMap(String username,String password); 用户验证登录-->
+    <select id="checkloginByMap" resultType="User">
+        select * from t_user where username = #{username} and password = #{password}
+    </select>
+
+    <!-- 对应接口中的方法 void insertUser(User user);添加用户信息-->
+    <insert id="insertUser">
+        insert into t_user values(null, #{username}, #{password}, #{gender}, #{age}, #{email})
+    </insert>
+
+    <!-- 对应接口中的方法 User checkloginByParam(@Param("username") String username, @Param("password") String password); 用户验证登录-->
+    <select id="checkloginByParam" resultType="User">
+        select * from t_user where username = #{username} and password = #{password}
+    </select>
+</mapper>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+通过ServletAPI获取请求参数
+<p><a th:href="@{/param/servletAPI(username='admin',password=123456)}">Test</a></p>
+通过控制器方法的形参获取请求参数
+<p><a th:href="@{/param1(username='admin',password=123456)}">Test</a></p>
+@RequestParam注解使用案例
+<p><a th:href="@{/param2(USERNAME='admin',PASSWORD=123456)}">Test</a></p>
+@RequestHeader注解、@CookieValue注解使用
+<p><a th:href="@{/param3}">Test</a></p>
+通过POJO获取请求参数
+<p><a th:href="@{/param4(username='admin',password=123456)}">Test</a></p>
+解决获取请求参数的乱码问题
+<form th:action="@{/param5}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+</body>
+</html>

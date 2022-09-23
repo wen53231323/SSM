@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  namespace名称空间，对应mapper接口的全类名 -->
+<mapper namespace="mapper.UserMapper">
+    <!--  ================================MyBatis的各种查询功能=================================  -->
+    <!--User getUserById(@Param("id") int id);-->
+    <select id="getUserById" resultType="pojo.User">
+	  select * from t_user where id = #{id}
+    </select>
+
+    <!--List<User> getUserList();-->
+    <select id="getUserList" resultType="User">
+	  select * from t_user
+    </select>
+
+    <!--int getCount();-->
+    <select id="getCount" resultType="_integer">
+	  select count(id) from t_user
+    </select>
+
+    <!--Map<String, Object> getUserToMap(@Param("id") int id);-->
+    <select id="getUserToMap" resultType="map">
+	  select * from t_user where id = #{id}
+    </select>
+
+    <!-- List<Map<String, Object>> getAllUserToMap_1(); -->
+    <select id="getAllUserToMap_1" resultType="map">
+	  select * from t_user
+    </select>
+
+    <!-- Map<String, Object> getAllUserToMap_2(); -->
+    <select id="getAllUserToMap_2" resultType="map">
+	  select * from t_user
+    </select>
+
+    <!-- ================================MyBatis特殊SQL的执行================================= -->
+    <!--List<User> getUserByLike(@Param("mohu") String mohu);-->
+    <select id="getUserByLike" resultType="User">
+        <!-- 方式一：利用${} -->
+        <!--select * from t_user where username like '%${mohu}%'-->
+        <!-- 方式二：利用mysql函数concat()字符串拼接-->
+        <!--select * from t_user where username like concat('%',#{mohu},'%')-->
+        <!-- 方式三（最常用的）-->
+        select * from t_user where username like "%"#{mohu}"%"
+    </select>
+
+    <!-- 只能使用${} -->
+    <delete id="deleteMore">
+	  delete from t_user where id in (${ids})
+    </delete>
+
+    <!--List<User> getUserByTable(@Param("tableName") String tableName);-->
+    <!-- 只能使用${}，因为表名不能加单引号 -->
+    <select id="getUserByTable" resultType="User">
+	  select * from ${tableName}
+    </select>
+
+    <!--void insertUser(User user);-->
+    <!-- useGeneratedKeys：设置使用自增的主键-->
+    <!-- keyProperty：因为增删改有统一的返回值是受影响的行数，因此只能将获取的自增的主键放在传输的参数user对象的某个属性中-->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+	  insert into t_user values (null,#{username},#{password},#{gender},#{age},#{email})
+    </insert>
+
+
+
+
+
+
+</mapper>

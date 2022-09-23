@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+查询功能
+<a th:href="@{/user}">访问所有员工信息</a>
+<a th:href="@{/user/1}">访问员工id为1的信息</a>
+<hr>
+添加功能
+<form th:action="@{/user}" method="post">
+    <input type="submit" value="添加用户"/>
+</form>
+<hr>
+
+删除功能
+<form th:action="@{/user/1}" method="post">
+    <!-- HiddenHttpMethodFilter要求：必须传输_method请求参数，并且value值为最终的请求方式 -->
+    <input type="hidden" name="_method" value="delete"/>
+    <input type="submit" value="删除用户信息">
+</form>
+<hr>
+
+修改功能
+<!-- 作用：通过超链接控制表单的提交，将post请求转换为put请求 -->
+<form th:action="@{/user}" method="post">
+    <!-- HiddenHttpMethodFilter要求：必须传输_method请求参数，并且value值为最终的请求方式 -->
+    <input type="hidden" name="_method" value="put"/>
+    <input type="submit" value="修改用户信息">
+</form>
+
+</body>
+</html>

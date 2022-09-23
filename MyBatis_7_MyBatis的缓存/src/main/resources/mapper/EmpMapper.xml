@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 对应mapper接口的全类名 -->
+<mapper namespace="mapper.EmpMapper">
+    <!-- 开启二级缓存 -->
+    <!--<cache/>-->
+    <!-- 使用第三方缓存EhcacheCache -->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+    <!--Emp getEmpById(@Param("id") String id);-->
+    <select id="getEmpById" resultType="Emp">
+        select * from t_emp where emp_id=#{empId}
+    </select>
+</mapper>

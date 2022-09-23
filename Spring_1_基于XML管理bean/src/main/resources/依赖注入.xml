@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+    <!--
+        bean标签：配置IOC容器所管理的bean
+        id属性：设置bean的唯一标识
+        class属性：设置bean所对应类型的全类名
+    -->
+
+    <!-- ====================================setter注入方式====================================-->
+    <bean id="student_1" class="spring.Spring.pojo.Student">
+        <!-- property标签：通过组件类的setXxx()方法给组件对象设置属性 -->
+        <!-- name属性：指定属性名（这个属性名是getXxx()、setXxx()方法定义的，和成员变量无关）-->
+        <!-- value属性：指定属性值 -->
+        <property name="id" value="1001"></property>
+        <property name="name" value="张三"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+    </bean>
+
+    <!-- ====================================构造器注入方式====================================-->
+    <bean id="student_2" class="spring.Spring.pojo.Student">
+        <!-- value属性：指定属性值 -->
+        <!-- index属性：指定参数所在位置的索引（从0开始）-->
+        <!-- name属性：指定参数名 -->
+        <constructor-arg value="1002"></constructor-arg>
+        <constructor-arg value="李四"></constructor-arg>
+        <constructor-arg value="33"></constructor-arg>
+        <constructor-arg value="女"></constructor-arg>
+    </bean>
+
+    <!-- ====================================特殊值处理====================================-->
+    <bean id="student_tsz" class="spring.Spring.pojo.Student">
+        <property name="id" value="1002"></property>
+        <!-- 为属性赋值为null，若使用property标签的value属性赋值，则属性为字符串类型的null -->
+        <property name="name" value="null"></property>
+        <!-- 为属性赋值为null，需要使用null标签 -->
+        <property name="age">
+            <null></null>
+        </property>
+        <!-- xml标签中不能使用大于小于<>等特殊字符 -->
+        <!-- 解决方式一：使用XML实体来代替（<用&lt;表示，>用&gt;表示）-->
+        <!--<property name="gender" value="a &lt; b"></property>-->
+        <!-- 解决方式二：解决方案二：使用CDATA节（CDATA节中的内容，会被XML解析器原样解析，所以CDATA节中写什么符号都随意）-->
+        <property name="gender">
+            <value><![CDATA[a < b]]></value>
+        </property>
+    </bean>
+
+    <bean id="clazz_1" class="spring.Spring.pojo.Clazz">
+        <property name="clazzId" value="111"></property>
+        <property name="clazzName" value="一班"></property>
+    </bean>
+
+    <!-- ====================================为 类 类型属性赋值（级联属性赋值方式）====================================-->
+    <bean id="student_3" class="spring.Spring.pojo.Student">
+        <!-- property标签：通过组件类的setXxx()方法给组件对象设置属性 -->
+        <!-- name属性：指定属性名（这个属性名是getXxx()、setXxx()方法定义的，和成员变量无关）-->
+        <!-- value属性：指定属性值 -->
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="id" value="1001"></property>
+        <property name="name" value="张三"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <!-- 一定先引用某个bean为属性赋值，才可以使用级联方式更新属性 -->
+        <property name="clazz" ref="clazz_1"></property>
+        <property name="clazz.clazzId" value="222"></property>
+        <property name="clazz.clazzName" value="二班"></property>
+    </bean>
+
+
+    <!-- ====================================为 类 类型属性赋值（引用外部已声明的bean方式）====================================-->
+    <bean id="student_4" class="spring.Spring.pojo.Student">
+        <!-- property标签：通过组件类的setXxx()方法给组件对象设置属性 -->
+        <!-- name属性：指定属性名（这个属性名是getXxx()、setXxx()方法定义的，和成员变量无关）-->
+        <!-- value属性：指定属性值 -->
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="id" value="1001"></property>
+        <property name="name" value="张三"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="clazz" ref="clazz_1"></property>
+    </bean>
+
+    <!-- ====================================为 类 类型属性赋值（内部bean方式）====================================-->
+    <bean id="student_5" class="spring.Spring.pojo.Student">
+        <!-- property标签：通过组件类的setXxx()方法给组件对象设置属性 -->
+        <!-- name属性：指定属性名（这个属性名是getXxx()、setXxx()方法定义的，和成员变量无关）-->
+        <!-- value属性：指定属性值 -->
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="id" value="1001"></property>
+        <property name="name" value="张三"></property>
+        <property name="age" value="23"></property>
+        <property name="gender" value="男"></property>
+        <property name="clazz">
+            <!-- 在一个bean中再声明一个bean就是内部bean -->
+            <!-- 内部bean只能用于给属性赋值，不能在外部通过IOC容器获取，因此可以省略id属性 -->
+            <bean id="clazzInner" class="spring.Spring.pojo.Clazz">
+                <property name="clazzId" value="333"></property>
+                <property name="clazzName" value="三班"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!--==================================== 为数组类型属性赋值 ====================================-->
+    <bean id="student_6" class="spring.Spring.pojo.Student">
+        <property name="id" value="1004"></property>
+        <property name="name" value="赵六"></property>
+        <property name="age" value="26"></property>
+        <property name="gender" value="女"></property>
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="clazz" ref="clazz_1"></property>
+        <property name="hobbies">
+            <array>
+                <value>爱好1</value>
+                <value>爱好2</value>
+                <value>爱好3</value>
+            </array>
+        </property>
+    </bean>
+    <!--==============================为集合类型属性赋值（list和set）====================-->
+    <bean id="clazz_2" class="spring.Spring.pojo.Clazz">
+        <property name="clazzId" value="4444"></property>
+        <property name="clazzName" value="Java"></property>
+        <property name="students">
+            <!--若为Set集合类型属性赋值，只需要将其中的list标签改为set标签即可-->
+            <list>
+                <ref bean="student_1"></ref>
+                <ref bean="student_2"></ref>
+                <ref bean="student_3"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!--配置一个集合类型的bean，需要使用util的约束-->
+    <util:list id="studentList">
+        <ref bean="student_1"></ref>
+        <ref bean="student_2"></ref>
+        <ref bean="student_3"></ref>
+    </util:list>
+    <bean id="clazz_3" class="spring.Spring.pojo.Clazz">
+        <property name="clazzId" value="4444"></property>
+        <property name="clazzName" value="Javaee0222"></property>
+        <property name="students" ref="studentList"></property>
+    </bean>
+
+    <!--============================== 为集合类型属性赋值（map）==============================-->
+    <bean id="teacher_1" class="spring.Spring.pojo.Teacher">
+        <property name="teacherId" value="1001"></property>
+        <property name="teacherName" value="老师一"></property>
+    </bean>
+    <bean id="teacher_2" class="spring.Spring.pojo.Teacher">
+        <property name="teacherId" value="1002"></property>
+        <property name="teacherName" value="老师二"></property>
+    </bean>
+
+    <bean id="student_7" class="spring.Spring.pojo.Student">
+        <property name="id" value="1004"></property>
+        <property name="name" value="赵六"></property>
+        <property name="age" value="26"></property>
+        <property name="gender" value="女"></property>
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="clazz" ref="clazz_1"></property>
+
+        <property name="hobbies">
+            <array>
+                <value>爱好1</value>
+                <value>爱好2</value>
+                <value>爱好3</value>
+            </array>
+        </property>
+
+        <property name="teacherMap">
+            <map>
+                <!-- 一个entry表示map中一对键值对 -->
+                <!-- 方式一 -->
+                <entry>
+                    <key>
+                        <value>1001</value>
+                    </key>
+                    <ref bean="teacher_1"></ref>
+                </entry>
+                <!-- 方式二 -->
+                <entry key="1002" value-ref="teacher_2"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <!--配置一个集合类型的bean，需要使用util的约束-->
+    <util:map id="techerMap">
+        <entry key="1001" value-ref="teacher_1"></entry>
+        <entry key="1002" value-ref="teacher_2"></entry>
+    </util:map>
+
+    <bean id="student_8" class="spring.Spring.pojo.Student">
+        <property name="id" value="1004"></property>
+        <property name="name" value="赵六"></property>
+        <property name="age" value="26"></property>
+        <property name="gender" value="女"></property>
+        <!-- ref属性：引用IOC容器中某个bean的id，将所对应的bean为属性赋值 -->
+        <property name="clazz" ref="clazz_1"></property>
+        <property name="hobbies">
+            <array>
+                <value>爱好1</value>
+                <value>爱好2</value>
+                <value>爱好3</value>
+            </array>
+        </property>
+
+        <property name="teacherMap" ref="techerMap"></property>
+    </bean>
+
+    <!--==============================p命名空间==============================-->
+    <bean id="student_9" class="spring.Spring.pojo.Student"
+          p:id="1006" p:name="小明" p:clazz-ref="clazz_1" p:teacherMap-ref="techerMap">
+    </bean>
+</beans>

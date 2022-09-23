@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+使用ServletAPI向request域对象共享数据
+<form th:action="@{/testServletAPI}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用ModelAndView向request域对象共享数据
+<form th:action="@{/testModelAndView}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用Model向request域对象共享数据
+<form th:action="@{/testModel}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用ModelMap向request域对象共享数据
+<form th:action="@{/testModelMap}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用map向request域对象共享数据
+<form th:action="@{/testMap}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用ServletAPI向session域对象共享数据
+<form th:action="@{/testSession}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+<br>
+
+使用ServletAPI向application域共享数据
+<form th:action="@{/testApplication}" method="post">
+    <input type="text" name="username" value="小明">
+    <input type="password" name="password" value="123456">
+    <input type="submit" value="提交">
+</form>
+
+</body>
+</html>

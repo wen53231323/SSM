@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 对应mapper接口的全类名 -->
+<mapper namespace="mapper.EmpMapper">
+    <!--
+        查询功能的标签必须设置resultType或resultMap，且两个属性不能同时存在
+        resultType：设置默认的映射关系，设置结果类型，即查询的数据要装换为的java类型
+        resultMap：设置自定义的映射关系，处理多对一或一对多的映射关系
+    -->
+
+    <!-- ========================Mysql字段 和 java属性 映射关系处理========================================= -->
+    <!--Emp getEmpByEmpId_1(@Param("empId") Integer empId);-->
+    <select id="getEmpByEmpId_1" resultType="Emp">
+        <!-- 数据库字段名和实体类中的属性名不一致，使用别名解决 -->
+        <!-- select emp_id as empId,emp_name as empName,age,gender from t_emp where emp_id = #{empId} -->
+        <!-- 数据库字段名和实体类中的属性名不一致，使用配置文件映射解决 -->
+        select * from t_emp where emp_id = #{empId}
+    </select>
+
+    <!-- resultMap标签：设置自定义映射-->
+    <!-- id属性：表示自定义映射的唯一标识，不能重复-->
+    <!-- type属性：查询的数据要映射的实体类的类型-->
+    <resultMap id="EmpByEmpId_2" type="Emp">
+        <!-- id标签：设置主键的映射关系  -->
+        <!-- result标签：设置普通字段的映射关系 -->
+        <!-- column属性：设置映射关系中表中的字段名-->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+    </resultMap>
+    <!-- Emp getEmpByEmpId_2(@Param("empId") Integer empId); -->
+    <select id="getEmpByEmpId_2" resultMap="EmpByEmpId_2">
+	  select * from t_emp where emp_id = #{empId}
+    </select>
+
+    <!-- ======================================多对一映射关系处理=========================================== -->
+    <!-- （1）方式一：使用mysql语法级联查询处理 -->
+    <!-- resultMap标签：设置自定义映射-->
+    <!-- id属性：表示自定义映射的唯一标识，不能重复-->
+    <!-- type属性：查询的数据要映射的实体类的类型-->
+    <resultMap id="EmpAndDeptByEmpId_1" type="Emp">
+        <!-- id标签：设置主键的映射关系  -->
+        <!-- result标签：设置普通字段的映射关系 -->
+        <!-- column属性：设置映射关系中表中的字段名-->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <result column="dept_id" property="dept.deptId"></result>
+        <result column="dept_name" property="dept.deptName"></result>
+    </resultMap>
+    <!-- Emp getEmpAndDeptByEmpId_1(@Param("empId") Integer empId); -->
+    <select id="getEmpAndDeptByEmpId_1" resultMap="EmpAndDeptByEmpId_1">
+	  select
+	  t_emp.*,t_dept.*
+	  from t_emp
+	  left join t_dept
+	  on t_emp.dept_id = t_dept.dept_id
+	  where t_emp.emp_id = #{empId}
+    </select>
+
+    <!--（2）方式二：association -->
+    <!-- resultMap标签：设置自定义映射-->
+    <!-- id属性：表示自定义映射的唯一标识，不能重复-->
+    <!-- type属性：查询的数据要映射的实体类的类型-->
+    <resultMap id="EmpAndDeptByEmpId_2" type="Emp">
+        <!-- id标签：设置主键的映射关系  -->
+        <!-- result标签：设置普通字段的映射关系 -->
+        <!-- column属性：设置映射关系中表中的字段名-->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <!-- association标签：处理多对一的映射关系 -->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <!-- javaType：设置需要处理的属性的类型-->
+        <association property="dept" javaType="Dept">
+            <id column="dept_id" property="deptId"></id>
+            <result column="dept_name" property="deptName"></result>
+        </association>
+    </resultMap>
+    <!-- Emp getEmpAndDeptByEmpId_2(@Param("empId") Integer empId); -->
+    <select id="getEmpAndDeptByEmpId_2" resultMap="EmpAndDeptByEmpId_2">
+	  select
+	  t_emp.*,t_dept.*
+	  from t_emp
+	  left join t_dept
+	  on t_emp.dept_id = t_dept.dept_id
+	  where t_emp.emp_id = #{empId}
+    </select>
+
+
+    <!--（3）方式三：分步查询-->
+    <!-- resultMap标签：设置自定义映射-->
+    <!-- id属性：表示自定义映射的唯一标识，不能重复-->
+    <!-- type属性：查询的数据要映射的实体类的类型-->
+    <resultMap id="EmpAndDeptByStep" type="Emp">
+        <!-- id标签：设置主键的映射关系  -->
+        <!-- result标签：设置普通字段的映射关系 -->
+        <!-- column属性：设置映射关系中表中的字段名-->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <id column="emp_id" property="empId"></id>
+        <result column="emp_name" property="empName"></result>
+        <result column="age" property="age"></result>
+        <result column="gender" property="gender"></result>
+        <!-- association标签：处理多对一的映射关系 -->
+        <!-- property属性：设置映射关系中实体类中的属性名-->
+        <!-- select属性：设置分步查询的sql的唯一标识（namespace.SQLId或mapper接口的全类名.方法名）-->
+        <!-- column属性：将查询出的某个字段，设置为分步查询的sql条件-->
+        <!-- fetchType属性：在开启了延迟加载的环境下，通过该属性设置分步查询是否使用延迟加载，是否延迟加载（lazy）或立即加载（eager）-->
+        <association property="dept"
+                     select="mapper.DeptMapper.getEmpAndDeptByStep_2"
+                     column="dept_id"
+                     fetchType="eager">
+
+        </association>
+    </resultMap>
+    <!-- Emp getEmpAndDeptByStep_1(@Param("empId") Integer empId); -->
+    <select id="getEmpAndDeptByStep_1" resultMap="EmpAndDeptByStep">
+      select * from t_emp where emp_id = #{empId}
+    </select>
+
+
+
+    <!-- Emp getEmpAndDeptByStep_1(@Param("empId") Integer empId); -->
+    <select id="getDeptAdeptIdndEmpByStep_1" resultMap="EmpAndDeptByStep">
+      select * from t_emp where dept_id = #{deptId}
+    </select>
+
+
+</mapper>

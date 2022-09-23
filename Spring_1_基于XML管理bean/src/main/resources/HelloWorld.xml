@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--
+        bean标签：配置IOC容器所管理的bean
+        id属性：设置bean的唯一标识
+        class属性：设置bean所对应类型的全类名
+    -->
+
+    <!-- 配置HelloWorld所对应的bean，将HelloWorld的对象交给Spring的IOC容器管理 -->
+    <bean id="helloworld" class="入门案例.HelloWorld"></bean>
+
+</beans>

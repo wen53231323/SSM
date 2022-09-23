@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!--
+       基于注解的AOP的实现：
+       1、将目标对象和切面交给IOC容器管理（注解+扫描）
+       2、开启AspectJ的自动代理，为目标对象自动生成代理
+       3、将切面类通过注解@Aspect标识
+   -->
+    <!-- 组件扫描 -->
+    <context:component-scan base-package="基于xml的AOP"></context:component-scan>
+
+    <aop:config>
+        <!-- 将IOC容器的某个bean设置为切面类-->
+        <aop:aspect ref="logAspec">
+            <!-- 设置公共的切入点表达式-->
+            <aop:pointcut id="pointCut" expression="execution(* 基于xml的AOP.CalculatorImpl.*(..))"/>
+            <!-- 前置通知 -->
+            <aop:before method="beforeMethod" pointcut-ref="pointCut"></aop:before>
+            <!-- 后置通知 -->
+            <aop:after method="afterMethod" pointcut-ref="pointCut"></aop:after>
+            <!-- 返回通知 -->
+            <aop:after-returning method="afterReturningMethod" returning="result" pointcut-ref="pointCut"></aop:after-returning>
+            <!-- 异常通知 -->
+            <aop:after-throwing method="afterThrowingMethod" throwing="ex" pointcut-ref="pointCut"></aop:after-throwing>
+            <!-- 环绕通知-->
+            <aop:around method="aroundMethod" pointcut-ref="pointCut"></aop:around>
+        </aop:aspect>
+       <!-- 设置切面的优先级 -->
+        <aop:aspect ref="validateAspect" order="1">
+            <aop:before method="beforeMethod" pointcut-ref="pointCut"></aop:before>
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 对应mapper接口的全类名 -->
+<mapper namespace="mapper.EmpMapper">
+    <!--List<Emp> getEmpByCondition_if(Emp emp);-->
+    <select id="getEmpByCondition_if" resultType="Emp">
+        select * from t_emp
+        where 1=1
+        <!-- 如果员工名不为null且不为空字符串-->
+        <if test="empName != null and empName !=''">
+            emp_name=#{empName}
+        </if>
+        <!-- 如果员工年龄不为null且不为空字符串-->
+        <if test="age != null and age !=''">
+            and age=#{age}
+        </if>
+        <!-- 如果员工性别不为null且不为空字符串-->
+        <if test="gender != null and gender !=''">
+            and gender=#{gender}
+        </if>
+    </select>
+
+    <!--List<Emp> getEmpByCondition_where(Emp emp);-->
+    <select id="getEmpByCondition_where" resultType="Emp">
+        select * from t_emp
+        <where>
+            <!-- 如果员工名不为null且不为空字符串-->
+            <if test="empName != null and empName !=''">
+                emp_name=#{empName}
+            </if>
+            <!-- 如果员工年龄不为null且不为空字符串-->
+            <if test="age != null and age !=''">
+                and age=#{age}
+            </if>
+            <!-- 如果员工性别不为null且不为空字符串-->
+            <if test="gender != null and gender !=''">
+                and gender=#{gender}
+            </if>
+        </where>
+    </select>
+
+    <!--List<Emp> getEmpByCondition_trim(Emp emp);-->
+    <select id="getEmpByCondition_trim" resultType="Emp">
+        select * from t_emp
+        <trim prefix="where" prefixOverrides="and">
+            <!-- 如果员工名不为null且不为空字符串-->
+            <if test="empName != null and empName !=''">
+                emp_name=#{empName}
+            </if>
+            <!-- 如果员工年龄不为null且不为空字符串-->
+            <if test="age != null and age !=''">
+                and age=#{age}
+            </if>
+            <!-- 如果员工性别不为null且不为空字符串-->
+            <if test="gender != null and gender !=''">
+                and gender=#{gender}
+            </if>
+        </trim>
+    </select>
+
+    <!--List<Emp> getEmpBychoose_cwo(Emp emp);-->
+    <select id="getEmpBychoose_cwo" resultType="Emp">
+        select * from t_emp
+        <where>
+            <choose>
+                <when test="empName != null and empName !=''">
+                    emp_name=#{empName}
+                </when>
+                <when test="age != null and age !=''">
+                    age=#{age}
+                </when>
+                <when test="gender != null and gender !=''">
+                    gender=#{gender}
+                </when>
+                <otherwise></otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--void insertMoreEmp(List<Emp> emps);-->
+    <insert id="insertMoreEmp">
+        insert into t_emp values
+        <foreach collection="emps" item="emp" separator=",">
+            (null,#{emp.empName},#{emp.age},#{emp.gender},null)
+        </foreach>
+    </insert>
+
+    <!--void deleteMoreEmpByArray(@Param("empIds") Integer[] empIds);-->
+    <delete id="deleteMoreEmpByArray">
+        delete from t_emp where emp_id in
+        <!-- 方式一 -->
+        <foreach collection="empIds" item="eid" separator="," open="(" close=")">
+            #{eid}
+        </foreach>
+        <!-- 方式二 -->
+        <foreach collection="empIds" item="eid" separator="or">
+        emp_id=#{eid}
+        </foreach>
+    </delete>
+
+    <!-- sql片段 -->
+    <sql id="testsql">
+        emp_id,emp_name,age,gender,dept_id
+    </sql>
+    <!--List<Emp> selectAllEmp();-->
+    <select id="selectAllEmp" resultType="Emp">
+        select <include refid="testsql"></include> from t_emp
+    </select>
+
+
+</mapper>

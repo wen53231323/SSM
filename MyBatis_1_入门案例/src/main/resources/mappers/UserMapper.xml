@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  namespace名称空间，对应mapper接口的全类名 -->
+<mapper namespace="mapper.UserMapper">
+
+    <!-- 对应接口中的方法int insertUser();添加用户信息-->
+    <insert id="insertUser">
+        insert into t_user values(null,'admin','123456','男',18,'123@qq.com')
+    </insert>
+
+    <!-- 对应接口中的方法void updateUser();更新用户信息-->
+    <update id="updateUser">
+        update t_user set username = '张三' where id = 1
+    </update>
+
+    <!-- 对应接口中的方法void deleteUser();删除用户信息-->
+    <delete id="deleteUser">
+        delete from t_user where id = 2
+    </delete>
+
+    <!-- 对应接口中的方法User getUserById();根据id查询用户 -->
+    <!--
+        查询功能的标签必须设置resultType或resultMap，且两个属性不能同时存在
+        resultType：设置默认的映射关系，设置结果类型，即查询的数据要装换为的java类型
+        resultMap：设置自定义的映射关系，处理多对一或一对多的映射关系
+    -->
+    <select id="getUserById" resultType="pojo.User">
+        select * from t_user where id = 1
+    </select>
+
+    <!-- 对应接口中的方法List<User> getAllUser();获取所有用户信息-->
+    <select id="getAllUser" resultType="pojo.User">
+        select * from t_user
+    </select>
+</mapper>

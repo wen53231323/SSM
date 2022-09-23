@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入vue -->
+    <script type="text/javascript" th:src="@{/js/vue.js}"></script>
+    <!-- 引入axios -->
+    <script type="text/javascript" th:src="@{/js/axios-0.18.0.js}"></script>
+</head>
+<body>
+
+<a href="/testDown">图片下载</a>
+<hr>
+图片上传
+<form action="/testUp" method="post" enctype="multipart/form-data">
+    <input type="file" name="photo">
+    <input type="submit" value="上传">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入vue -->
+    <script type="text/javascript" th:src="@{/js/vue.js}"></script>
+    <!-- 引入axios -->
+    <script type="text/javascript" th:src="@{/js/axios-0.18.0.js}"></script>
+</head>
+<body>
+
+<div id="app">
+    <h1>@RequestBody注解</h1>
+    <input type="button" value="@RequestBody注解使用案例" @click="testRequestBody()"><br>
+    <input type="button" value="@RequestBody注解获取json格式的请求参数，转换为map集合" @click="testRequestBody_Map()"><br>
+    <input type="button" value="@RequestBody注解获取json格式的请求参数，转换为实体类" @click="testRequestBody_pojo()">
+    <hr>
+    <h1>@ResponseBody注解</h1>
+    <input type="button" value="@ResponseBody注解使用案例" @click="testResponseBody()"><br>
+    <input type="button" value="@ResponseBody注解获取json格式的请求参数，转换为实体类" @click="testResponseBody_pojo()"><br>
+    <input type="button" value="@ResponseBody注解获取json格式的请求参数，转换为map集合" @click="testResponseBody_Map()"><br>
+    <input type="button" value="@ResponseBody注解获取json格式的请求参数，转换为List集合" @click="testResponseBody_List()">
+</div>
+
+<script type="text/javascript">
+    var vue = new Vue({
+        el: "#app",
+        methods: {
+            // 点击事件
+            testRequestBody() {
+                axios({
+                    // 请求方式
+                    method: "post",
+                    // 请求地址
+                    url: "http://localhost:8080/testRequestBody",
+                    // 请求参数（get请求或post请求都可以，以k=v&k=v方式发送请求参数，将参数拼接到请求地址后）
+                    // 后端可以通过request.getParameter()获取，SpringMVC直接通过控制器形参获取
+                    params: {id: 1},
+                    // 请求参数（只能是post请求，以json格式发送请求参数，请求参数会被保存到请求报文的请求体中，传输到服务器）
+                    // 后端通过处理json的jar包将json转换为java对象获取，SpringMVC直接通过注解获取
+                    data: {"username": "小明", "password": 123456}
+                    // 响应数据
+                }).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            // 点击事件
+            testRequestBody_Map() {
+                var jsontest = {username: "admin", password: "123456"};
+                axios.post(
+                    "http://localhost:8080/testRequestBody_Map", jsontest
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            // 点击事件
+            testRequestBody_pojo() {
+                var jsontest = {username: "admin", password: "123456"};
+                axios.post(
+                    "http://localhost:8080/testRequestBody_pojo", jsontest
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            // 点击事件
+            testResponseBody(){
+                axios.post(
+                    "http://localhost:8080/testResponseBody"
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            // 点击事件
+            testResponseBody_pojo(){
+                axios.post(
+                    "http://localhost:8080/testResponseBody_pojo"
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            testResponseBody_Map(){
+                axios.post(
+                    "http://localhost:8080/testResponseBody_Map"
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            },
+            testResponseBody_List(){
+                axios.post(
+                    "http://localhost:8080/testResponseBody_List"
+                ).then(function (response) {
+                    // 弹窗提示
+                    alert(response.data);
+                })
+            }
+        }
+    })
+</script>
+
+
+</body>
+</html>
